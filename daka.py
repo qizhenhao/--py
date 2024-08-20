@@ -4,7 +4,7 @@ import time
 from threading import Thread
 import os
 import sys
-from windows_api import show_popup
+from windows_api import qizhenhao_style_up, qizhenhao_style_down
 
 determine = [False, False]
 
@@ -15,13 +15,21 @@ def check_time():
         hour = current_time.tm_hour
         minute = current_time.tm_min
         # 检查是否在指定时间段内
-        if (8 <= hour < 9 and minute < 30) and not determine[0]:
-            determine[0] = show_popup(True)
-            time.sleep(60)  # 每分钟检查一次
+        if (8 <= hour < 9 ) and not determine[0]:
+            determine[0] = qizhenhao_style_up()
+            if determine[0] == None:
+                determine[0] = True
+            else:
+                time.sleep(int(determine[0]) * 60 - 30)
+                determine[0] = False
 
-        if (18 <= hour < 19) and not determine[1]:
-            determine[1] = show_popup(False)
-            time.sleep(60)
+        if (18 <= hour < 22) and not determine[1]:
+            determine[1] = qizhenhao_style_down()
+            if determine[1] == None:
+                determine[1] = True
+            else:
+                time.sleep(determine[1] * 60 - 30)
+                determine[1] = False
         
         if hour >= 0 and hour < 5:
             determine[0] = determine[1] = False  # 重置状态
